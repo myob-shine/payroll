@@ -1,0 +1,23 @@
+version: "2"
+services:
+  node:
+    image: "node:9.11.1-alpine"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./nodejs/app:/home/node/app
+    expose:
+      - "8081"
+    command: "npm start"
+    ports:
+        - 3000:3000
+    links:
+     - mongo
+  mongo:
+      image: mongo
+      volumes:
+        - ./mongodb/data:/data/db
+      ports:
+        - "27017:27017"
