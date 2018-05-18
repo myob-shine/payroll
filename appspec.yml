@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: ./
+    destination: /home/ec2-user/setup
+hooks:
+  ApplicationStart:
+    - location: cd /home/ec2-user/setup && docker-compose up
+      timeout: 200
+      runas: root
