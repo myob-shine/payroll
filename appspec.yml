@@ -2,9 +2,13 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: /home/ec2-user/setup
+    destination: /home/ec2-user/setup/payroll
 hooks:
+  AfterInstall:
+    - location: codedeploy/install.sh
+      timeout: 300
+      runas: root
   ApplicationStart:
-    - location: cd /home/ec2-user/setup && docker-compose up
+    - location: codedeploy/start.sh
       timeout: 200
       runas: root
