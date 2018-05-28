@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var payments = require('./routes/payments');
+var tax = require('./routes/tax');
 
 var port = 3000;
 
@@ -28,6 +29,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', index);
 app.use('/api', payments);
+app.use('/api', tax);
 
 app.listen(process.env.PORT || port, () => {
     // console.log('Server started on port: ' + port);

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { PaymentService } from '../../services/payment.service';
+import { TaxService } from '../../services/tax.service';
 import { Payment } from '../../../Payment';
 
 @Component({
   moduleId: module.id,
   selector: 'payments',
   templateUrl: 'payments.component.html',
-  providers: [PaymentService]
+  providers: [PaymentService, TaxService]
 })
 export class PaymentsComponent { 
     firstName: string;
@@ -18,7 +19,7 @@ export class PaymentsComponent {
     payments: Payment[];    
     showPayslip = false;
 
-    constructor(private paymentService: PaymentService) {
+    constructor(private paymentService: PaymentService, private taxService: TaxService) {
         this.payslip = null;
         this.paymentService.getPayments()
             .subscribe(payments => {
@@ -78,13 +79,7 @@ export class PaymentsComponent {
         this.payslip.payPeriodMonth = this.getPayPeriodMonth(this.payslip.payPeriod);
         this.payslip.payPeriodFormatted = this.getPayPeriodFormatted(this.payslip.payPeriod);
         this.payslip.grossIncome = this.calculateGrossIncome(this.payslip.annualSalary); 
-        this.payslip.incomeTax = this.calculateIncomeTax(this.payslip.annualSalary);  
-        this.payslip.netIncome =  this.calculateNetIncome(this.payslip.grossIncome, this.payslip.incomeTax);
-        this.payslip.super = this.calculateSuper(this.payslip.grossIncome, this.payslip.superRate);
-        this.payslip.pay = this.calculatePay(this.payslip.netIncome, this.payslip.super);
-
-        this.showPayslip = true;
-        this.clearEmployeeInfo();
+        this.calculateIncomeTax(this.payslip.annualSalary);
     }
 
     // Save new employee payment
@@ -155,43 +150,22 @@ export class PaymentsComponent {
         return Math.round(annualSalary / 12);
     }
 
-    /*
-        Source: https://www.ato.gov.au/Rates/Individual-income-tax-for-prior-years/
-        0 – $18,200         Nil
-        $18,201 – $37,000   19c for each $1 over $18,200
-        $37,001 – $80,000   $3,572 plus 32.5c for each $1 over $37,000
-        $80,001 – $180,000  $17,547 plus 37c for each $1 over $80,000
-        $180,001 and over   $54,547 plus 45c for each $1 over $180,000
-    */
     calculateIncomeTax(taxableIncome: number) : number {
-        var taxRate: number = 0;
-        var taxAmount: number = 0;
-        var taxThreshold: number = 0;
+        this.taxService.getIncomeTax(taxableIncome)
+            .subscribe(incomeTax => {
+                this.payslip.incomeTax = incomeTax.incomeTax;
+                this.payslip.netIncome =  this.calculateNetIncome(this.payslip.grossIncome, this.payslip.incomeTax);
+                this.payslip.super = this.calculateSuper(this.payslip.grossIncome, this.payslip.superRate);
+                this.payslip.pay = this.calculatePay(this.payslip.netIncome, this.payslip.super);
 
-        if (taxableIncome === 0 || (taxableIncome > 0 && taxableIncome <= 18200)) {
-            return 0;
-        } else if (taxableIncome > 18200 && taxableIncome <= 37000) {
-            taxRate = 0.19;
-            taxAmount = 0;
-            taxThreshold = 18200;
-        } else if (taxableIncome > 37000 && taxableIncome <= 80000) {
-            taxRate = 0.325;
-            taxAmount = 3572;
-            taxThreshold = 37000;
-        } else if (taxableIncome > 80000 && taxableIncome <= 180000) {
-            taxRate = 0.37;
-            taxAmount = 17547;
-            taxThreshold = 80000;
-        } else if (taxableIncome > 180000) {
-            taxRate = 0.45;
-            taxAmount = 54547;
-            taxThreshold = 180000;
-        }
-
-        return Math.round((taxAmount + (Math.max(0, taxableIncome - taxThreshold)) * taxRate) / 12);
+                this.showPayslip = true;
+                this.clearEmployeeInfo();
+                return incomeTax;
+            });
     }
 
-    calculateNetIncome(grossIncome: number, incomeTax: number) : number {        
+    calculateNetIncome(grossIncome: number, incomeTax: number) : number {
+        console.log('calculateNetIncome: Income Tax = ' +incomeTax);
         return Math.max(0, grossIncome - incomeTax);
     }
 

@@ -8,12 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var payment_service_1 = require('../../services/payment.service');
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var payment_service_1 = require("../../services/payment.service");
+var tax_service_1 = require("../../services/tax.service");
 var PaymentsComponent = (function () {
-    function PaymentsComponent(paymentService) {
+    function PaymentsComponent(paymentService, taxService) {
         var _this = this;
         this.paymentService = paymentService;
+        this.taxService = taxService;
         this.showPayslip = false;
         this.payslip = null;
         this.paymentService.getPayments()
@@ -66,12 +69,7 @@ var PaymentsComponent = (function () {
         this.payslip.payPeriodMonth = this.getPayPeriodMonth(this.payslip.payPeriod);
         this.payslip.payPeriodFormatted = this.getPayPeriodFormatted(this.payslip.payPeriod);
         this.payslip.grossIncome = this.calculateGrossIncome(this.payslip.annualSalary);
-        this.payslip.incomeTax = this.calculateIncomeTax(this.payslip.annualSalary);
-        this.payslip.netIncome = this.calculateNetIncome(this.payslip.grossIncome, this.payslip.incomeTax);
-        this.payslip.super = this.calculateSuper(this.payslip.grossIncome, this.payslip.superRate);
-        this.payslip.pay = this.calculatePay(this.payslip.netIncome, this.payslip.super);
-        this.showPayslip = true;
-        this.clearEmployeeInfo();
+        this.calculateIncomeTax(this.payslip.annualSalary);
     };
     // Save new employee payment
     PaymentsComponent.prototype.savePayment = function () {
@@ -132,44 +130,21 @@ var PaymentsComponent = (function () {
     PaymentsComponent.prototype.calculateGrossIncome = function (annualSalary) {
         return Math.round(annualSalary / 12);
     };
-    /*
-        Source: https://www.ato.gov.au/Rates/Individual-income-tax-for-prior-years/
-        0 – $18,200         Nil
-        $18,201 – $37,000   19c for each $1 over $18,200
-        $37,001 – $80,000   $3,572 plus 32.5c for each $1 over $37,000
-        $80,001 – $180,000  $17,547 plus 37c for each $1 over $80,000
-        $180,001 and over   $54,547 plus 45c for each $1 over $180,000
-    */
     PaymentsComponent.prototype.calculateIncomeTax = function (taxableIncome) {
-        var taxRate = 0;
-        var taxAmount = 0;
-        var taxThreshold = 0;
-        if (taxableIncome === 0 || (taxableIncome > 0 && taxableIncome <= 18200)) {
-            return 0;
-        }
-        else if (taxableIncome > 18200 && taxableIncome <= 37000) {
-            taxRate = 0.19;
-            taxAmount = 0;
-            taxThreshold = 18200;
-        }
-        else if (taxableIncome > 37000 && taxableIncome <= 80000) {
-            taxRate = 0.325;
-            taxAmount = 3572;
-            taxThreshold = 37000;
-        }
-        else if (taxableIncome > 80000 && taxableIncome <= 180000) {
-            taxRate = 0.37;
-            taxAmount = 17547;
-            taxThreshold = 80000;
-        }
-        else if (taxableIncome > 180000) {
-            taxRate = 0.45;
-            taxAmount = 54547;
-            taxThreshold = 180000;
-        }
-        return Math.round((taxAmount + (Math.max(0, taxableIncome - taxThreshold)) * taxRate) / 12);
+        var _this = this;
+        this.taxService.getIncomeTax(taxableIncome)
+            .subscribe(function (incomeTax) {
+            _this.payslip.incomeTax = incomeTax.incomeTax;
+            _this.payslip.netIncome = _this.calculateNetIncome(_this.payslip.grossIncome, _this.payslip.incomeTax);
+            _this.payslip.super = _this.calculateSuper(_this.payslip.grossIncome, _this.payslip.superRate);
+            _this.payslip.pay = _this.calculatePay(_this.payslip.netIncome, _this.payslip.super);
+            _this.showPayslip = true;
+            _this.clearEmployeeInfo();
+            return incomeTax;
+        });
     };
     PaymentsComponent.prototype.calculateNetIncome = function (grossIncome, incomeTax) {
+        console.log('calculateNetIncome: Income Tax = ' + incomeTax);
         return Math.max(0, grossIncome - incomeTax);
     };
     PaymentsComponent.prototype.calculateSuper = function (grossIncome, superRate) {
@@ -183,9 +158,9 @@ var PaymentsComponent = (function () {
             moduleId: module.id,
             selector: 'payments',
             templateUrl: 'payments.component.html',
-            providers: [payment_service_1.PaymentService]
-        }), 
-        __metadata('design:paramtypes', [payment_service_1.PaymentService])
+            providers: [payment_service_1.PaymentService, tax_service_1.TaxService]
+        }),
+        __metadata("design:paramtypes", [payment_service_1.PaymentService, tax_service_1.TaxService])
     ], PaymentsComponent);
     return PaymentsComponent;
 }());
