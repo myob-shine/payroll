@@ -28,5 +28,6 @@ exports.getIncomeTax = function(req, res, next) {
     var incomeTax = Math.round((taxAmount + (Math.max(0, taxableIncome - taxThreshold)) * taxRate) / 12);
 
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.end('{"incomeTax":' + incomeTax + '}');
 }
