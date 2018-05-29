@@ -1,23 +1,31 @@
 version: "2"
 services:
-  node:
+  payroll:
     image: "node:9.11.1-alpine"
-    user: "node"
     working_dir: /home/node/app
     environment:
       - NODE_ENV=production
     volumes:
-      - ./nodejs/app:/home/node/app
-    expose:
-      - "8081"
+      - ./payroll_service/nodejs/app:/home/node/app
     command: "npm start"
     ports:
-        - 80:3000
+        - "3000:3000"
     links:
      - mongo
+     - income
+  income:
+    image: "node:9.11.1-alpine"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./income_tax_service/nodejs/app:/home/node/app
+    command: "npm start"
+    ports:
+        - "3001:3001"
   mongo:
       image: mongo
       volumes:
-        - ./mongodb/data:/data/db
+        - ./payroll_service/mongodb/data:/data/db
       ports:
         - "27017:27017"
