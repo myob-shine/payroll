@@ -1,6 +1,7 @@
 .idea
 *.iml
 **/mongodb/data
+**/web_tests/reports
 
 # Logs
 logs
