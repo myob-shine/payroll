@@ -139,11 +139,9 @@ var PaymentsComponent = (function () {
             _this.payslip.pay = _this.calculatePay(_this.payslip.netIncome, _this.payslip.super);
             _this.showPayslip = true;
             _this.clearEmployeeInfo();
-            return incomeTax;
         });
     };
     PaymentsComponent.prototype.calculateNetIncome = function (grossIncome, incomeTax) {
-        console.log('calculateNetIncome: Income Tax = ' + incomeTax);
         return Math.max(0, grossIncome - incomeTax);
     };
     PaymentsComponent.prototype.calculateSuper = function (grossIncome, superRate) {

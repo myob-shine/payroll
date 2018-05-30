@@ -160,12 +160,10 @@ export class PaymentsComponent {
 
                 this.showPayslip = true;
                 this.clearEmployeeInfo();
-                return incomeTax;
             });
     }
 
     calculateNetIncome(grossIncome: number, incomeTax: number) : number {
-        console.log('calculateNetIncome: Income Tax = ' +incomeTax);
         return Math.max(0, grossIncome - incomeTax);
     }
 
