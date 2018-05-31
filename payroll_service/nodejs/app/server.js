@@ -30,5 +30,7 @@ app.use('/', index);
 app.use('/api', payments);
 
 app.listen(process.env.PORT || port, () => {
-    // console.log('Server started on port: ' + port);
+    console.log('Server started on port: ' + port);
 });
+
+module.exports = app;

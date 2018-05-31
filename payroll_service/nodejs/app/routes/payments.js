@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
-// var BSON = require('mongodb').BSONPure;
-var db = mongojs('mongodb://mongo:27017', ['payments']);
+
+var config = require('config');
+var db = mongojs(config.DBHost, ['payments']);
 
 // Find all payments
 router.get('/payments', (request, response, next) => {
@@ -15,7 +16,7 @@ router.get('/payments', (request, response, next) => {
 });
 
 // Find a payment
-router.get('/payment/:id', (request, response, next) => {    
+router.get('/payment/:id', (request, response, next) => {
     db.payments.findOne({_id: mongojs.ObjectId(request.params.id)}, (err, payment) => {
         if (err) {
             response.send(err);
@@ -44,19 +45,19 @@ router.post('/payment', (request, response, next) => {
                         response.send(err);
                     }
                     response.json(payment);
-                });           
+                });
             }  else {
                 response.status(400);
                     response.json({
                         "error": 'There is already an existing employee ' + payment.firstName + ' ' + payment.lastName
                 });
-            }      
+            }
         });
     }
 });
 
 // Delete payment
-router.delete('/payment/:id', (request, response, next) => {    
+router.delete('/payment/:id', (request, response, next) => {
     db.payments.remove({_id: mongojs.ObjectId(request.params.id)}, (err, payment) => {
         if (err) {
             response.send(err);
