@@ -16,7 +16,7 @@ var TaxService = (function () {
         this.http = http;
     }
     TaxService.prototype.getIncomeTax = function (taxableIncome) {
-        return this.http.get('http://localhost:3001/api/tax?taxableIncome=' + taxableIncome)
+        return this.http.get('http://income:3001/api/tax?taxableIncome=' + taxableIncome)
             .map(function (response) { return response.json(); });
     };
     TaxService = __decorate([
