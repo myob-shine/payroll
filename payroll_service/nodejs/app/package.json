@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "web-test": "NODE_ENV=test node ./node_modules/selenium-cucumber-js/index.js -s ./test/web_tests/step_definitions -f ./test/web_tests/features -r ./test/web_tests/reports -p ./test/web_tests/page_objects -x 50000",
-    "api-test": "NODE_ENV=test mocha test/api_tests --timeout 10000"
+    "web-tests": "NODE_ENV=test node ./node_modules/selenium-cucumber-js/index.js -s ./test/web_tests/step_definitions -f ./test/web_tests/features -r ./test/web_tests/reports -p ./test/web_tests/page_objects -x 50000",
+    "api-tests": "NODE_ENV=test mocha test/api_tests --timeout 10000"
   },
   "author": "MYOB",
   "license": "MIT",
