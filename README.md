@@ -26,7 +26,7 @@ Please ensure that you have a installed Docker Compose version 1.21 or later.
 docker-compose up -d
 cd payroll_service/nodejs/app
 npm install
-npm run web-tests
+npm run test-web
 cd ../../..
 docker-compose down
 ```
@@ -37,7 +37,7 @@ docker-compose down
 docker-compose up mongo -d
 cd payroll_service/nodejs/app
 npm install
-npm run api-tests
+npm run test-api
 cd ../../..
 docker-compose down
 ```

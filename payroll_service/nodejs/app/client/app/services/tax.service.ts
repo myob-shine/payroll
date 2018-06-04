@@ -8,7 +8,7 @@ export class TaxService {
     }
 
     getIncomeTax(taxableIncome: number) {
-        return this.http.get('http://income:3001/api/tax?taxableIncome=' + taxableIncome)
+        return this.http.get('/api/tax?taxableIncome=' + taxableIncome)
             .map(response => response.json());
     }
 }

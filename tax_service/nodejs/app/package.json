@@ -1,11 +1,10 @@
 {
-  "name": "incometaxservice",
+  "name": "taxservice",
   "version": "1.0.0",
-  "description": "Income Tax Service",
+  "description": "Tax Service",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "node test/test.js"
+    "start": "node server.js"
   },
   "author": "MYOB",
   "license": "MIT",

@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "web-tests": "NODE_ENV=test node ./node_modules/selenium-cucumber-js/index.js -s ./test/web_tests/step_definitions -f ./test/web_tests/features -r ./test/web_tests/reports -p ./test/web_tests/page_objects -x 50000",
-    "api-tests": "NODE_ENV=test mocha test/api_tests --timeout 10000"
+    "test-web": "NODE_ENV=test node ./node_modules/selenium-cucumber-js/index.js -s ./test/web/step_definitions -f ./test/web/features -r ./test/reports -p ./test/web/page_objects -x 50000",
+    "test-api": "NODE_ENV=test mocha ./test/api --timeout 10000"
   },
   "author": "MYOB",
   "license": "MIT",
@@ -14,6 +14,7 @@
     "body-parser": "^1.16.0",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
+    "proxy-express": "^2.0.1",
     "mongojs": "^2.4.0",
     "config": "^1.20.1"
   },

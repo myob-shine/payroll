@@ -5,16 +5,6 @@ var mongojs = require('mongojs');
 var config = require('config');
 var db = mongojs(config.DBHost, ['payments']);
 
-// Find all payments
-router.get('/payments', (request, response, next) => {
-    db.payments.find().sort({firstName: 1}, (err, payments) => {
-        if (err) {
-            response.send(err);
-        }
-        response.json(payments);
-    });
-});
-
 // Find a payment
 router.get('/payment/:id', (request, response, next) => {
     db.payments.findOne({_id: mongojs.ObjectId(request.params.id)}, (err, payment) => {
@@ -26,7 +16,7 @@ router.get('/payment/:id', (request, response, next) => {
 });
 
 // Save a payment
-router.put('/payment', (request, response, next) => {
+router.post('/payment', (request, response, next) => {
     console.log("HEEREERERE");
     var payment = request.body;
 

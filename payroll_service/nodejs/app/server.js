@@ -4,10 +4,12 @@
 */
 
 var express = require('express');
+var proxy  = require('proxy-express');
 var path = require('path');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
+var payment = require('./routes/payment');
 var payments = require('./routes/payments');
 
 var port = 3000;
@@ -27,10 +29,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', index);
+app.use('/api', payment);
 app.use('/api', payments);
+app.use(proxy('tax:3001/api/tax', '/api/tax'));
 
 app.listen(process.env.PORT || port, () => {
-    console.log('Server started on port: ' + port);
+    //console.log('Server started on port: ' + port);
 });
 
 module.exports = app;
