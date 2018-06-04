@@ -9,7 +9,7 @@ services:
       - ./payroll_service/nodejs/app:/home/node/app
     command: "npm start"
     ports:
-        - "3000:3000"
+        - "80:3000"
     links:
      - tax
      - payments
