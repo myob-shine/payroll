@@ -4,17 +4,19 @@
 */
 
 var express = require('express');
-var proxy  = require('proxy-express');
+var proxy = require('http-proxy-middleware');
 var path = require('path');
-var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var payment = require('./routes/payment');
-var payments = require('./routes/payments');
 
 var port = 3000;
 
 var app = express();
+
+app.use('/', index);
+app.use('/api/tax', proxy({target: 'http://tax:3001', changeOrigin: true}));
+app.use('/api/payments', proxy({target: 'http://payments:3002', changeOrigin: true}));
+app.use('/api/payment', proxy({target: 'http://payments:3002', changeOrigin: true}));
 
 // View engine
 app.set('views', path.join(__dirname, 'views'));    // Set views folder location
@@ -23,15 +25,6 @@ app.engine('html', require('ejs').renderFile);      // Add ability to render htm
 
 // Set static client folder
 app.use(express.static(path.join(__dirname, 'client')));
-
-// Body parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
-app.use('/', index);
-app.use('/api', payment);
-app.use('/api', payments);
-app.use(proxy('tax:3001/api/tax', '/api/tax'));
 
 app.listen(process.env.PORT || port, () => {
     //console.log('Server started on port: ' + port);

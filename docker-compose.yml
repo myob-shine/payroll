@@ -11,8 +11,8 @@ services:
     ports:
         - "3000:3000"
     links:
-     - mongo
      - tax
+     - payments
   tax:
     image: "node:9.11.1-alpine"
     working_dir: /home/node/app
@@ -23,6 +23,18 @@ services:
     command: "npm start"
     ports:
         - "3001:3001"
+  payments:
+    image: "node:9.11.1-alpine"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./payments_Service/nodejs/app:/home/node/app
+    command: "npm start"
+    ports:
+        - "3002:3002"
+    links:
+     - mongo
   mongo:
       image: mongo
       volumes:
