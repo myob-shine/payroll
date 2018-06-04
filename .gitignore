@@ -1,6 +1,7 @@
 .idea
 *.iml
-mongodb/data
+**/mongodb/data
+**/test/reports
 
 # Logs
 logs

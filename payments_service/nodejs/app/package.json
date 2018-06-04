@@ -1,0 +1,23 @@
+{
+  "name": "hrpayrollsystem",
+  "version": "1.0.0",
+  "description": "Sample HR Payroll System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "NODE_ENV=test mocha --timeout 10000"
+  },
+  "author": "MYOB",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "body-parser": "^1.16.0",
+    "mongojs": "^2.4.0",
+    "config": "^1.20.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5"
+  }
+}
