@@ -2,42 +2,29 @@
 
 This application is a playground for demonstrating your skills used in the recruitment process at MYOB.
 
-# Prerequisites
-
-The following applications are required for running and testing this project.
+# Requirements
 
 ## NodeJS
 
 Please ensure that you have a installed NodeJS version 5.8.0 or later.
 
-## Docker
-
-Please ensure that you have a installed Docker version 18.0 or later.
-
-## Docker Compose
-
-Please ensure that you have a installed Docker Compose version 1.21 or later.
-
 # Tests
+
+## Run API Tests
+```
+cd payments_service/nodejs/app && npm test
+```
 
 ## Run Web Tests
 
+### Start Dependencies
 ```
-docker-compose up -d
-cd payroll_service/nodejs/app
-npm install
-npm run test-web
-cd ../../..
-docker-compose down
+cd payroll_service/nodejs/app && npm install && npm start
+cd payments_service/nodejs/app && npm install && npm start
+cd tax_service/nodejs/app && npm install && npm start
 ```
 
-## Run API Tests
-
+### Run tests
 ```
-docker-compose up mongo -d
-cd payroll_service/nodejs/app
-npm install
-npm run test-api
-cd ../../..
-docker-compose down
+cd payroll_service/nodejs/app && npm test
 ```
