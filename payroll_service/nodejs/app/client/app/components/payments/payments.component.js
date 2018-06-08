@@ -18,6 +18,7 @@ var PaymentsComponent = (function () {
         this.taxService = taxService;
         this.showPayslip = false;
         this.payslip = null;
+        this.maxId = 0;
         this.paymentService.getPayments()
             .subscribe(function (payments) {
             _this.payments = payments;
@@ -57,8 +58,10 @@ var PaymentsComponent = (function () {
             return;
         }
         // Generate new payslip
+        this.maxId = this.maxId + 1;
         this.payslip = new Payslip();
         this.payslip.isNew = true;
+        this.payslip._id = this.maxId;
         this.payslip.firstName = this.capitaliseWord(this.firstName);
         this.payslip.lastName = this.capitaliseWord(this.lastName);
         this.payslip.annualSalary = this.annualSalary;
@@ -97,11 +100,9 @@ var PaymentsComponent = (function () {
     PaymentsComponent.prototype.deletePayment = function (id) {
         var payments = this.payments;
         this.paymentService.deletePayment(id).subscribe(function (data) {
-            if (data.n == 1) {
-                for (var i = 0; i < payments.length; i++) {
-                    if (payments[i]._id == id) {
-                        payments.splice(i, 1);
-                    }
+            for (var i = 0; i < payments.length; i++) {
+                if (payments[i]._id == id) {
+                    payments.splice(i, 1);
                 }
             }
         });

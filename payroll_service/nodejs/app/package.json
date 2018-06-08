@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "NODE_ENV=test node ./node_modules/selenium-cucumber-js/index.js -s ./test/step_definitions -f ./test/features -r ./test/reports -p ./test/page_objects -x 50000"
+    "test": "./node_modules/selenium-cucumber-js/index.js -s ./test/step_definitions -f ./test/features -r ./test/reports -p ./test/page_objects -x 50000"
   },
   "author": "MYOB",
   "license": "MIT",

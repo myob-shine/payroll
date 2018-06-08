@@ -3,17 +3,14 @@ let chaiHttp = require('chai-http');
 let server = require('../server');
 let should = chai.should();
 
-let mongojs = require('mongojs');
-let config = require('config');
-let db = mongojs(config.DBHost, ['payments']);
 
 chai.use(chaiHttp);
 
-before((done) => {
+/*before((done) => {
     db.payments.remove({}, () => {
        done();
     });
-});
+});*/
 
 describe('/GET payment when no payments exist', () => {
     it('it should GET all the payments', (done) => {
@@ -32,6 +29,7 @@ describe('/GET payment when no payments exist', () => {
 describe('/GET payment when a payment exists', () => {
     before( (done) => {
         let payment = {
+            _id:1,
             annualSalary:81900,
             firstName:"John",
             grossIncome:6825,
@@ -46,9 +44,11 @@ describe('/GET payment when a payment exists', () => {
             super:614,
             superRate:9
         }
-        db.payments.save(payment, (err) => {
-            done();
-        });
+
+    chai.request(server)
+        .post('/api/payment')
+        .send(payment)
+        .end(done())
     })
 
     it('it should GET the payment', (done) => {
