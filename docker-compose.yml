@@ -33,11 +33,3 @@ services:
     command: "npm start"
     ports:
         - "3002:3002"
-    links:
-     - mongo
-  mongo:
-      image: mongo
-      volumes:
-        - ./payroll_service/mongodb/data:/data/db
-      ports:
-        - "27017:27017"

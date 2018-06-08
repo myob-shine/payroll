@@ -1,5 +1,5 @@
 module.exports = {
-    url: 'http://localhost:3000',
+    url: 'http://localhost',
     elements: {
         employeeForm: by.name('employeeForm'),
         firstNameInput: by.name('firstName'),

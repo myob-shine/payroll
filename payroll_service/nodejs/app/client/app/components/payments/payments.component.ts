@@ -9,7 +9,8 @@ import { Payment } from '../../../Payment';
   templateUrl: 'payments.component.html',
   providers: [PaymentService, TaxService]
 })
-export class PaymentsComponent { 
+export class PaymentsComponent {
+    maxId: number;
     firstName: string;
     lastName: string;
     superRate: number;
@@ -21,6 +22,7 @@ export class PaymentsComponent {
 
     constructor(private paymentService: PaymentService, private taxService: TaxService) {
         this.payslip = null;
+        this.maxId = 0;
         this.paymentService.getPayments()
             .subscribe(payments => {
                 this.payments = payments;
@@ -67,8 +69,11 @@ export class PaymentsComponent {
             }
 
         // Generate new payslip
+        this.maxId = this.maxId + 1;
+
         this.payslip = new Payslip();
         this.payslip.isNew = true;
+        this.payslip._id = this.maxId;
         this.payslip.firstName = this.capitaliseWord(this.firstName);
         this.payslip.lastName = this.capitaliseWord(this.lastName);
         this.payslip.annualSalary = this.annualSalary;
@@ -110,11 +115,9 @@ export class PaymentsComponent {
     deletePayment(id: any) {
         var payments = this.payments;
         this.paymentService.deletePayment(id).subscribe(data => {
-            if (data.n == 1) {
-                for (var i = 0; i < payments.length; i++) {
-                    if (payments[i]._id == id) {
-                        payments.splice(i, 1);
-                    }
+            for (var i = 0; i < payments.length; i++) {
+                if (payments[i]._id == id) {
+                    payments.splice(i, 1);
                 }
             }
         }); 
@@ -190,4 +193,5 @@ export class Payslip implements Payment {
     super: number;
     pay: number;
     isNew: boolean;
+    _id: number;
 }

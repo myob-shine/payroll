@@ -6,7 +6,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-var payment = require('./routes/payment');
 var payments = require('./routes/payments');
 
 var port = 3002;
@@ -17,7 +16,6 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use('/api', payment);
 app.use('/api', payments);
 
 app.listen(process.env.PORT || port, () => {
