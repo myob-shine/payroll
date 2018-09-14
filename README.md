@@ -19,6 +19,7 @@ cd payments_service/nodejs/app && npm test
 
 ### Start Dependencies
 ```
+cd payroll_service/nodejs/client && npm install
 cd payroll_service/nodejs/app && npm install && npm start
 cd payments_service/nodejs/app && npm install && npm start
 cd tax_service/nodejs/app && npm install && npm start
